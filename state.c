@@ -711,23 +711,7 @@ int load_state(device_testing_context_type *device_testing_context) {
                 return LOAD_STATE_LOAD_ERROR;
             }
 
-            // Make sure numeric values are greater than 0 and strings are more
-            // than 0 characters in length
-            if(prop_types[i] == json_type_int) {
-                if(json_object_get_uint64(obj) == 0) {
-                    log_log(device_testing_context, __func__, SEVERITY_LEVEL_DEBUG, MSG_REJECTING_STATE_FILE_PROPERTY_UNPARSEABLE_OR_ZERO, all_props[i]);
-
-                    free_buffers();
-                    return LOAD_STATE_LOAD_ERROR;
-                }
-            } else if(prop_types[i] == json_type_double) {
-                if(json_object_get_double(obj) <= 0) {
-                    log_log(device_testing_context, __func__, SEVERITY_LEVEL_DEBUG, MSG_REJECTING_STATE_FILE_PROPERTY_UNPARSEABLE_OR_ZERO, all_props[i]);
-
-                    free_buffers();
-                    return LOAD_STATE_LOAD_ERROR;
-                }
-            } else if(prop_types[i] == json_type_string) {
+            if(prop_types[i] == json_type_string) {
                 // Go ahead and copy it over to a buffer
                 if(!(buffers[i] = strdup(json_object_get_string(obj)))) {
                     log_log(device_testing_context, __func__, SEVERITY_LEVEL_DEBUG, MSG_STRDUP_ERROR, strerror(errno));
